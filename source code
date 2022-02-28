@@ -1,0 +1,664 @@
+ #include<iostream>
+  #include<vector>
+  #include<string>
+  #include <chrono>
+  #include<cmath>
+using namespace std;
+using namespace std::chrono;
+unsigned int randam_number(){//this function generate an randam unsigned integer using the time value in seconds from 1970
+     return (unsigned int) duration_cast<milliseconds>(system_clock::now().time_since_epoch()).count();
+     
+}
+struct customer_detail{//this is the structure used storing all the relevant information about a person
+    char type;
+    string name;
+    unsigned int account_number;
+    long int addhar_card_number;
+      long int pen_card_number;
+      long int mobile_number;
+    string IFSC; // below is a parametic constructor which assigned all the data of a person to it's internal field's
+    customer_detail(char Type,string Name, unsigned int Anum, long int PNUM, long int addhar_num,long int mnum){
+IFSC="ICICI470035";
+type=Type;
+name=Name;
+account_number=Anum;
+addhar_card_number=addhar_num;
+pen_card_number=PNUM;
+mobile_number=mnum;
+    }
+};
+struct fund_detail{//this structure is used to store all the revelant information about an fund
+    string fund_name;
+    int star_ranking;
+    float rating;
+    float past_1_year_return;
+    float past_3_year_return;
+    float past_5_year_return;
+    float minimum_standing_instruction;
+    float AUM;//below is a parametic constructor which assigned all the data of a person to it's internal field's
+    fund_detail(string nm,int rank,float rate,float p1yr,float p3yr,float p5yr,float aum,float si){
+        fund_name=nm;
+        star_ranking=rank;
+        minimum_standing_instruction=si;
+        rating=rate;
+        past_1_year_return=p1yr;
+        past_3_year_return=p3yr;
+        past_5_year_return=p5yr;
+        AUM=aum;
+    }
+};
+class accounts{//this class represent all the account sector of this bank
+    private://below vector store the data of every account holder
+    vector<customer_detail> saving_account_holders;
+    vector<customer_detail> current_account_holders;
+    vector<customer_detail> Fixed_deposit_holders;
+    vector<customer_detail> recurring_deposit_holders;
+    vector<customer_detail> salary_account;
+    vector<customer_detail> foreign_account;
+    public:
+      accounts(){}
+    void detail_of_account(){// this function is used to display all the types of accounts available in the bank
+        int type;
+        cout<<"Various Types Of Bank Accounts are:-\n";
+        cout<<"1.  Current account \n";
+        cout<<"2.  Savings account  \n";
+        cout<<"3.  Salary account \n";
+        cout<<"4.  Fixed deposit account \n";
+        cout<<"5. Recurring deposit account \n";
+        cout<<"6.  Foreign currency non-resident (FCNR) account \n";
+       cout<<"To know complete detail of any type of account please enter their corresponding serial number:-   ";
+       cin>>type;
+       if(type==1)
+           cout<<"\ncurrent account is a deposit account for traders, business owners, and entrepreneurs, who need to make and receive payments more often than others. These accounts hold more liquid deposits with no limit on the number of transactions per day. Current accounts allow overdraft facility, that is withdrawing more than what is currently available in the account. Also, unlike savings accounts, where you earn some interest, these are zero-interest bearing accounts. You need to maintain a minimum balance to be able to operate current account\n\n";
+       else if(type==2)
+       cout<<"\nA savings bank account is a regular deposit account, where you earn a minimum rate of interest. Here, the number of transactions you can make each month is capped. Banks offer a variety of Savings Accounts based on the type of depositor, features of the product, age or purpose of holding the account, and so on\n\n";
+           else if(type==3)
+       cout<<"\nAmong the different types of bank accounts, your salary account is the one you have opened as per the tie-up between your employer and the bank. This is the account, where salaries of every employee are credited to at the beginning of the pay cycle. Employees can pick their type of salary account based on the features they want. The bank, where you have a salary account, also maintains reimbursement accounts; this is where your allowances and reimbursements are credited to. \n\n";
+           else if(type==4)
+       cout<<"\nA fixed deposit (FD) account allows you to earn a fixed rate of interest for keeping a certain sum of money locked in for a given time, that is until the FD matures. FDs range between a maturity period of seven days to 10 years. The rate of interest you earn on FDs will vary depending on the tenure of the FD. Generally, you cannot withdraw money from an FD before it matures. Some banks offer a premature withdrawal facility. But in that case, the interest rate you earn is lower\n\n";
+           else if(type==5)
+       cout<<"\nA recurring deposit (RD) has a fixed tenure. You need to invest a fixed sum of money in it regularly -- every month or once a quarter -- to earn interest. Unlike FDs, where you need to make a lump sum deposit, the sum you need to invest here is smaller and more frequent. You cannot change the tenure of the RD and the amount to be invested each month or quarter. Even in the case of RDs, you face a penalty in the form of a lower interest rate for premature withdrawal. The maturity period of an RD could range between six months to 10 years.\n\n";
+           else 
+       cout<<"\nAs the name suggests and unlike the other two types of bank accounts, FCNR accounts are maintained in foreign currency. The principal and interest from these accounts are transferable, but the interest earned is not taxed in India. \n\n";
+        
+    }
+     void creating_account(){// this function creates an account of a person and push it in the relevant vector field
+           char type;
+    string name;
+    unsigned int accountnumber;
+    long int addhar_number;
+      long int pen_number;
+      long int mobile_number;
+  cout<<"PLEASE ENTER YOUR FOLLOWING DETAILS:- \n";
+  cout<<"NAME:- ";
+  cin>>name;
+  cout<<"addhar card number:- ";
+  cin>>addhar_number;
+  cout<<"pen card number:-  ";
+  cin>>pen_number;
+  cout<<"mobile number:-  ";
+  cin>>mobile_number;
+  accountnumber=randam_number();
+  cout<<"YOUR ACCOUNT NUMBER IS :- "<<accountnumber<<"\n";
+  cout<<"PLEASE ENTER THE TYPE OF ACCOUNT YOU ARE WILLING TO OPERATE:- s.saving  c.current  f.fixed  r.recurring  s1.salary(choose the respective character code ):-   ";
+  cin>>type;
+  
+     customer_detail* customer=new customer_detail(type,name,accountnumber,pen_number,addhar_number,mobile_number);
+     if(type=='s')
+     saving_account_holders.push_back(*customer);
+     else if(type=='c')
+     current_account_holders.push_back(*customer);
+       else if(type=='f')
+     Fixed_deposit_holders.push_back(*customer);
+       else if(type=='r')
+     recurring_deposit_holders.push_back(*customer);
+       else 
+     salary_account.push_back(*customer);
+
+}
+
+};
+
+class money_transfer{
+    private:
+    //this variables hold the maximum amount for any transaction
+    int bank_to_bank;
+    int demand_draft;
+    int cheque;
+    int max_NEFT;
+    int max_RTGS;
+    int max_IMPS;
+    public:
+      money_transfer(){
+         bank_to_bank=400000;
+         demand_draft=200000;
+         cheque=100000;
+         max_NEFT=50000;
+         max_RTGS=50000;
+         max_IMPS=20000;
+     }
+void maximum_list(){//function to display all the maximum value stored in the private variable's
+    cout<<"\t\t\tLIST OF MAXIMUM AMOUNT \n";
+    cout<<"SR.NO\t\tMODE\t\t\tMAXIMUM AMOUNT\n";
+    cout<<"1.  \t\tBANK TO BANK\t\t"<<bank_to_bank<<"\n";
+    cout<<"2.  \t\tDEMAND DRAFT\t\t"<<demand_draft<<"\n";
+    cout<<"3.  \t\tCHEQUE\t\t"<<cheque<<"\n";
+    cout<<"4.  \t\tNEFT\t\t\t"<<max_NEFT<<"\n";
+      cout<<"5.  \t\tRTGS\t\t\t"<<max_RTGS<<"\n";
+        cout<<"6.  \t\tIMPS\t\t\t"<<max_IMPS<<"\n";
+}
+
+};
+class loan{// this class represents the loan sector of this bank
+    private:
+    //below variables stores the rate of interest of different loans
+    float ROI_education;
+    float ROI_business ;
+    float ROI_home;
+  
+public:
+loan(){//default constructor which assign's the value to the private variable
+    ROI_education=10.20;
+    ROI_business=25.75;
+    ROI_home=20.45;
+}
+//the following function will decide whether a customer is eligible for availing the education loan
+//if all the attributes of the account holder is greater than the minimum limit specified ,a loan can be provided
+void eduction_decider(float student_cgpa,int backlog,int any_gap,int amount){
+    int not_eligible=0;
+    if(student_cgpa < 6.00){
+        cout<<"\nsorry! your cgpa is below our minimum level\n\n ";
+        not_eligible++;
+}
+    if(backlog >3 ){
+         cout<<"\nsorry! you have more backlogs than our minimum level\n ";
+       not_eligible++;
+    }
+    if(any_gap>3 ){
+        cout<<"\nsorry! you have more number of study gap than our predecided level\n";
+        not_eligible++;
+    }
+
+    if(!not_eligible && amount<2000000){
+        cout<<"\n\t\t\t********!!!!!!!!!!CONGRATULATION!!!!!!!!!!********\n";
+        cout<<"you are eligible to avail our education loan of amount:-"<<amount<<"\n";
+        cout<<"RATE OF INTEREST SPECIFIED BY SEBI FOR EDUCATION LOAN :-  "<<ROI_education<<"\n";
+        cout<<"FURTHER PROCEDURE WILL BE DONE IN THE BANK,SO PLEASE VISIT OUR BANK AS SOON AS POSSIBLE\n\n";
+    }
+}
+    //the following function will decide whether a customer is eligible for availing the business loan
+    //if all the attributes of the account holder is greater than the minimum limit specified ,a loan can be provided
+    void business_decider(int income,int credit_score,int average_bank_balance,char ITR,char balance_sheet){
+        int not_eligible=0;
+        if(income<250000){
+            cout<<"\nSORRY! your income is below the specified minimum income\n";
+            not_eligible++;
+
+        }
+        if(credit_score<700 ){
+            cout<<"\nSORRY! your credit score is low\n";
+            not_eligible++;
+        }
+        if(average_bank_balance <75000){
+            cout<<"\nSORRY! your average bank balance is low\n";
+            not_eligible++;
+        }
+        if(ITR == 'N' || ITR =='n'){
+            cout<<"\nSINCE YOU DON'T HAVE ITR FILED, WE CANNOT MOVE AHEAD  \n";
+            not_eligible++;
+
+        }
+        if(balance_sheet == 'N' || balance_sheet =='n'){
+            cout<<"\nSINCE YOU DON'T PROPER BALANCE SHHETS , WE CANNOT MOVE \n";
+not_eligible++;
+        }
+        if(!not_eligible){
+            long int mobile;
+            cout<<"\nNOW,only verification of your ITR and balance sheet is remaining rest all is clear\n";
+            cout<<"PLEASE provide your phone number \n";
+                 cout<<"RATE OF INTEREST SPECIFIED BY SEBI FOR BUSINESS LOAN :-  "<<ROI_business<<"\n";
+            cin>>mobile;
+            cout<<"Call will be given on the provided number if the verification process is passed\n\n";
+        }
+
+    }
+//the following function will decide whether a customer is eligible for availing the home loan
+//if all the attributes of the account holder is greater than the minimum limit specified ,a loan can be provided
+    void home_decider(int CIBIL_score,int net_salary,int age,char ITR,char balance_sheet){
+
+    int not_eligible=0;
+        if(CIBIL_score<700){
+            cout<<"\nSORRY! your CIBIL score is below the specified minimum income\n";
+            not_eligible++;
+
+        }
+        if(net_salary<15000 ){
+            cout<<"\nSORRY! your net salary  is low\n";
+            not_eligible++;
+        }
+        if(age<=21 || age>=40){
+            cout<<"\n\nSORRY! your age is not fitting our age range\n";
+            not_eligible++;
+        }
+         if(ITR == 'N' || ITR =='n'){
+            cout<<"\nSINCE YOU DON'T HAVE ITR FILED, WE CANNOT MOVE AHEAD  \n";
+            not_eligible++;
+
+        }
+        if(balance_sheet == 'N' || balance_sheet =='n'){
+            cout<<"\nSINCE YOU DON'T PROPER BALANCE SHHETS , WE CANNOT MOVE \n";
+not_eligible++;
+        }
+        if(!not_eligible){
+             cout<<"\t\t\t********!!!!!!!!!!CONGRATULATION!!!!!!!!!!********\n";
+             cout<<"\nYou are eligible for the home loan ,further detail has been send on your number\n";
+                  cout<<"RATE OF INTEREST SPECIFIED BY SEBI FOR HOME LOAN :-  "<<ROI_home<<"\n";
+              cout<<"FURTHER PROCEDURE WILL BE DONE IN THE BANK,SO PLEASE VISIT OUR BANK AS SOON AS POSSIBLE\n\n";
+        }
+    
+         
+    }
+    
+
+};
+class parabanking{//this class represents the third party product detail(such as portfolio management)
+public:
+parabanking(){}
+void portfolio_management(){
+    int type;
+    cout<<"The following are the two type of portfolio management services that we provide:-  \n";
+    cout<<"* Discretionary portfolio management service\n";
+    cout<<"* non-Discretionary portfolio management service\n";
+    cout<<"enter the code to know more about these above services \n";
+    cout<<"1:- Discretionar  2:-non-Discretionary\n ";
+    cin>>type;
+    if(type==1){
+        cout<<"\n\nNon-Discretionary Portfolio Management Services means the portfolio management services rendered to the client, by the Portfolio Manager on the terms and conditions contained in the Agreement with respect to the Assets (including the Portfolio and Funds) of the Client, where the Portfolio Manager shall provide advice in relation to assets but does not exercise any discretion with respect to investments or management of the Assets of the Client, and invests and manage the Assets only after seeking and taking approval from the Client, entirely at the Clients risk.\n";
+    }
+        else{
+            cout<<"\n\nDiscretionary Portfolio Management Services means The portfolio management services rendered to the investor, by the Portfolio Manager on the terms and conditions contained in the Agreement with respect to the Portfolio and Funds of the Investor, where the Portfolio Manager exercises its sole and absolute discretion with respect to investments or management of the Assets of the Investor, entirely at the Investor's risk, in such manner as the Portfolio Manager may deem fit.\n";
+        }
+    cout<<"\nFOR COMPLETE DETAIL OF ANY TYPE OF PORTFOLIO MANAGEMENT SERVICE  CONTACT OUR MANAGEMENT-TEAM ON THIS NO:-40003040\n";
+    
+}
+};
+class insurance{//this class represents the insurance sector of the bank
+public:
+insurance(){}
+void car_insurance(){//this function provides all the details of the available car insurance
+cout<<"\n\t\t\tWE HAVE FOLLOWING TYPES OF CAR INSURANCE PLANS\n\n";
+cout<<"\t* COMPREHENSIVE CAR INSURANCE\n";
+cout<<"\t* CO-PASSENGER PROTECTION COVERAGE\n";
+cout<<"\t* THIRD-PARTY LIABILITY INSURANCE \n";
+cout<<"\t* PERSONAL RISK COVERAGE\n";
+cout<<"\n\n";
+cout<<"\n\t\t\tCOVERAGE FOR YOUR CAR IS PROVIDED ONLY IN FOLLOWING SCENARIO\n";
+cout<<"\t* ACCIDENT\n";
+cout<<"\t* NATURAL DISASTER\n";
+cout<<"\t* THIRD-PARTY LIABILITIES \n";
+cout<<"\t* LOSS OR THEFT\n";
+cout<<"\n\nFOR COMPLETE DETAIL OF INSURANCE PLEASE CONTACT OUR INSURANCE-TEAM ON THIS NO:-40003042\n";
+}
+void health_insurance(){//this function provides all the details of the available health insurance
+cout<<"\n\t\t\tWE HAVE FOLLOWING TYPES OF HEALTH INSURANCE PLANS\n";
+cout<<"\t* INDIVIDUAL INSURANCE\n";
+cout<<"\t* FAMILY-FLOATER INSURANCE\n";
+cout<<"\t* SENIOR CITIZEN INSURANCE\n";
+cout<<"\t* MATERNITY INSURANCE\n";
+cout<<"\n\n";
+cout<<"\n\t\t\tOUR FIXED BENEFIT PLANS ARE:\n";
+cout<<"\t* PREVENTIVE INSURANCE\n";
+cout<<"\t* CRITICAL ILLNESS\n";
+cout<<"\t* PERSONAL ACCIDENT \n";
+cout<<"\t* HOSPITAL DAILY CASH BENEFIT PLAN\n";
+cout<<"\nFOR COMPLETE DETAIL OF INSURANCE PLEASE CONTACT OUR INSURANCE-TEAM ON :-40003042\n";
+}
+void life_insurance(){//this function provides all the details of the available life insurance
+cout<<"\n\t\t\tWE HAVE FOLLOWING TYPES OF LIFE INSURANCE PLANS\n";
+cout<<"\t* TERM PLAN\n";
+cout<<"\t* UNIT LINKED INSURANCE PLAN\n";
+cout<<"\t* CHILD PLAN\n";
+cout<<"\t* ENDOWMENT AND RETIREMENT PLAN\n";
+cout<<"\nFOR COMPLETE DETAIL OF INSURANCE PLEASE CONTACT OUR INSURANCE-TEAM ON :-40003042";
+cout<<"\n\n";
+}
+void home_insurance(){//this function provides all the details of the available home insurance
+cout<<"\n\t\t\tWE HAVE FOLLOWING TYPES OF HOUSE INSURANCE PLANS\n";
+cout<<"\t* BUILDING INSURANCE\n";
+cout<<"\t* CONTENT INSURANCE\n";
+cout<<"\t* BOILER INSURANCE\n";
+cout<<"\t* FIRE,FLOOD AND EARTHQUAKE INSURANCE\n";
+cout<<"\nFOR COMPLETE DETAIL OF INSURANCE PLEASE CONTACT OUR INSURANCE-TEAM ON :-40003042\n";
+}
+};
+
+class mutual_fund{//this class represents the mutual funds sector of the bank
+    private:
+vector<fund_detail> all_funds;//this vector hold information about each mutual fund
+public:
+mutual_fund(){}
+void categories(){
+ cout<<"\n\t\t\tWE HAVE FOLLOWING TYPES OF MUTUAL FUNDS CURRENTLY AVAILABLE\n";
+cout<<"\t* ACTIVE AND PASSIVE FUNDS\n";
+cout<<"\t* EQUITY FUND\n";
+cout<<"\t* BALANCED FUNDS\n";
+cout<<"\t* FIXED INCOME FUNDS(FI)\n";
+cout<<"\nFOR COMPLETE DETAIL OF ANY MUTUAL FUND PLEASE CONTACT OUR INSURANCE-TEAM ON :-40003042\n";   
+}
+void top_funds(){// this functions stores the top mutual fund detail into the available vector field
+fund_detail* fund1=new fund_detail("SBI  Childrens Benefit Fund",1,4.7,178.08,35.69,24.90,2.09,23.42);
+all_funds.push_back(*fund1);
+fund1=new  fund_detail("Quant Small Cap Fund    ",2,4.65,101.84,34.92,24.90,1241.37,11.19);
+all_funds.push_back(*fund1);
+fund1=new  fund_detail("sundaram Long Term  Fund",3,4.5,98.95,30.91,22.45,41.16,9.21);
+all_funds.push_back(*fund1);
+fund1=new  fund_detail("ICICI Prudential Technology",5,4.2,88.65,30.5,21.3,6886.59,13.64);
+all_funds.push_back(*fund1);
+fund1=new  fund_detail("Kotak Small Cap Fund    ",6,4.0,87.5,29.34,20.9,6180,18.18);
+all_funds.push_back(*fund1);
+fund1=new  fund_detail("Aditya Birla  Digital India",7,4.0,87.2,29.0,20.01,2658.13,12.77);
+all_funds.push_back(*fund1);
+fund1=new  fund_detail("L&T Emerging Businesses Fund  ",8,3.98,85.84,28.92,20.90,7554.4,21.06);
+all_funds.push_back(*fund1);
+fund1=new  fund_detail("IDFC Infrastructure Fund",9,3.70,84.45,27.34,19.90,661.37,8.9);
+all_funds.push_back(*fund1);
+fund1=new  fund_detail("HDFC Small Cap Fund    c",10,3.65,83.84,25.92,18.90,13182.37,15.19);
+all_funds.push_back(*fund1);
+
+}
+void display_funds(){//this function generates the list of all the funds stored into the private vector
+cout<<"\n\t\tFOLLOWING ARE THE TOP-10 MUTUAL FUNDS\n\n";
+cout<<"\tNAME\t\t\tRATING\t\tRETURN(%)\t\tAUM(in crs)\n";
+cout<<"\t\t\t\t\t\t\t\t1Y\t\t2Y\t\t3Y\n";
+     ;
+for(int i=0;i<9;i++){
+    cout<<all_funds[i].fund_name<<"\t"<<all_funds[i].rating<<"\t\t"<<all_funds[i].past_1_year_return<<"\t\t"<<all_funds[i].past_3_year_return<<"\t\t"<<all_funds[i].past_5_year_return<<"\t\t"<<all_funds[i].AUM<<"\n";
+}
+    
+}
+void sip_calculator(){//this function calculates the systematic investment plan depending upon the amount,time period and interest rate provided by the user
+    int principal_amount;
+    int number_of_payments;
+    float Expect_return_rate;
+    long int Future_value;
+    cout<<"enter the amount you will invested at the start of every payment interval:-  ";
+    cin>>principal_amount;
+    cout<<"enter the number of payments(number of months without skipping any):- ";
+    cin>>number_of_payments;
+    cout<<"enter the Expected return rate in percentage per annum";
+    cin>>Expect_return_rate;
+    float i=Expect_return_rate/(100*12+0.0);
+    Future_value=principal_amount*((pow(1+i,number_of_payments)-1)/i)*(1+i);
+    cout<<"Total Investment:- "<<principal_amount*number_of_payments<<"\n";
+    cout<<"Maturity value:- "<<Future_value<<"\n";
+    cout<<"Interest earned:-  "<<Future_value-principal_amount*number_of_payments<<"\n";
+   
+}
+};//this class inherit all the section's class of the bank(multiple inheritance  ) :the visibility mode of inheritance of each class is publc
+//in public mode  inheritance all the public method's becomes public method of the inheriting class
+//none of the private method and properties get inheritated in the class
+class main_interacting_body:public accounts,public loan,public parabanking,public insurance,public mutual_fund,public money_transfer{
+  public:
+};
+ void spaces(){
+      for(int i=0;i<14;i++){
+          cout<<"\t";
+      }
+  }
+
+ void bank_name(){//this function generates a nice version of the bank name
+          cout<<"\n\n";
+  cout<<"      ****************   *****       *****       ***** *****          ****************    ****************   ****************    ***** *****      \n ";
+  cout<<"          *****         *****       *****       *****    *****             *****               *****        *****               *****    *****\n"; 
+  cout<<"           *****         *****       *****       *****       *****          *****               *****        *****               *****        *****\n";
+  cout<<"           *****         *****       *****       *****         *****        *****               *****        *****               *****           *****\n";
+  cout<<"           *****         *****       *****       *****       *****          *****               *****        *****               *****        *****\n";
+  cout<<"           *****         *****       *****       *****    *****             *****               *****        ****************    *****    *****\n";
+  cout<<"           *****         *****       *****       ***** *****                *****               *****        *****               ***** *****\n";
+  cout<<"****       *****         *****       *****       *****                      *****               *****        *****               *****   *****\n";
+  cout<<" ****     *****          *****       *****       *****                      *****               *****        *****               *****      *****\n";
+  cout<<"  ****   *****            *****     *****        *****                      *****               *****        *****               *****          *****\n  ";
+  cout<<"   *****                     *****             *****                 ****************         *****        ****************    *****             *****\n";
+  cout<<"\n";
+    spaces();
+  cout<<"    ** **         **         **       **  **   **\n ";
+  spaces();
+  cout<<"    **   **     **  **       ** **    **  **  **\n"; 
+    spaces();
+  cout<<"    ** **      ********      **  **   **  ** **\n";
+    spaces();
+  cout<<"    **   **  **        **    **    ** **  **  **\n";
+    spaces();
+  cout<<"    ** **   **           **  **       **  **   **\n";
+    cout<<"\n\n";
+}
+int main() {
+  bank_name();//to display the name
+  int service;// this variable is used to decide which sector of the bank the user is interest of knowing
+  cout<<"CHOOSE ANY FOLLOWING SERVICE  \n";
+service=0;
+main_interacting_body current_object;
+while(service!=7){//this loop represents the bank system and keeps iterating until the system gets closed 
+    cout<<" 1. CREATE NEW ACCOUNT\n";
+    cout<<" 2. LOANS\n";
+    cout<<" 3. MUTUAL FUNDS\n";
+    cout<<" 4. MAXIMUM MONEY TRANSFER POSSIBLE THROUGH VARIOUS MEDIUM\n";
+    cout<<" 5. INSURANCE\n";
+    cout<<" 6. PORTFOLIO MANAGEMENT SERVICES\n";
+    cout<<" 7. EXIT\n";
+    cout<<"PLEASE ENTER THE CORRESPONDING SERIAL NUMBER OF THE SERVICE YOU WANT :-  ";
+    cin>>service;
+    if(service==7){
+        cout<<"chosing the system\n";
+        break;
+    }
+    switch (service)//this switch is used to choosee the relevant section of the main interacting body class
+    {
+    case 1:{
+    int in_accounts=1;
+    while(in_accounts){//this loop interactes with the user to provide the requred details of the account section
+        int account_section;
+         char ch='A';
+            cout<<" ACCOUNTS:- \n";
+            cout<<" 1. DETAILS ABOUT VARIOUS ACCOUNTS \n";
+            cout<<"2. CREATE A NEW ACCOUNT\n";
+            cout<<"3. BACK\n";
+            cout<<"PLEASE ENTER THE CORRESPONDING SERIAL NUMBER:- ";
+            cin>>account_section;
+           if(account_section<=0 || account_section >=4){
+               cout<<"PLEASE ENTER A VALID SERIAL NUMBER \n";
+               continue;
+           }
+            if(account_section==1 || account_section==2){
+            if(account_section==1){
+                current_object.detail_of_account();
+                cout<<"DO YOU WANT TO CREATE AN ACCOUNT:- Y(yes) N(no) \n";
+                cout<<"PLEASE ENTER(Y/N) :- ";
+                cin>>ch;
+            }  if(ch=='N')
+                in_accounts--;
+                else
+                current_object.creating_account();
+            }
+            else{
+                in_accounts--;
+            }
+    }
+        break;
+    }
+    case 2:{
+    int in_loan=1;
+    while(in_loan){//this loop interactes with the user to provide the requred details of the loan section
+        int loan_section;
+                  cout<<" LOANS:- \n";
+            cout<<" 1. EDUCATION LOAN \n";
+            cout<<"2. BUSINESS\n";
+            cout<<"3. HOME\n";
+                        cout<<"4 . BACK\n";
+            cout<<"PLEASE ENTER THE CORRESPONDING SERIAL NUMBER:- ";
+            cin>>loan_section;
+              if(loan_section<=0 || loan_section >=5){
+               cout<<"PLEASE ENTER A VALID SERIAL NUMBER \n";
+               continue;
+           }
+           if(loan_section==1){
+                float cgpa;
+             int backlog;
+             int gap;
+             int amount;
+               cout<<"  EDUCATION LOAN:- \n";
+            
+             cout<<"PLEASE ENTER YOUR CGPA:- ";
+cin>>cgpa;
+         cout<<"ENTER THE NUMBER OF BACKLOGS IF ANY ELSE ENTER '0' ";
+         cin>> backlog;
+         cout<<"ENTER THE NUMBER OF GAPS IF ANY ELSE ENTER '0'";
+         cin>>gap;
+         cout<<"NOW, ENTER THE AMOUNT OF LOAN YOU WISH TO AVAIL:- ";
+         cin>>amount; 
+         current_object.eduction_decider(cgpa,backlog,gap,amount);
+           }
+             
+             else if(loan_section==2){
+                  int income;
+             int credit_score;
+             int balance;
+             char itr;
+             char sheet;
+                         cout<<"  BUSINESS LOAN:- \n";
+            
+             cout<<"PLEASE ENTER YOUR INCOME:- ";
+cin>>income;
+         cout<<"ENTER YOUR CREDIT SCORE ";
+         cin>> credit_score;
+         cout<<"ENTER THE AVERAGE BANK BALANCE :-";
+         cin>>balance;
+         cout<<"DO YOU HAVE ITR FILED OF THE PAST THREE YEAR'S :- Y(yes) N(no) \n";
+                cout<<"PLEASE ENTER(Y/N) :- ";
+         cin>>itr; 
+         cout<<"DO YOU HAVE ALL MONTHS BALANCE SHEET  OF THIS  YEAR :- Y(yes) N(no) \n";
+                cout<<"PLEASE ENTER(Y/N) :- ";
+         cin>>sheet; 
+         current_object.business_decider(income,credit_score,balance,itr,sheet);
+           }
+      else if(loan_section==3){
+           int cibil;
+             int net_salary;
+             int age;
+             char itr;
+             char sheet;
+                         cout<<"  HOME LOAN:- \n";
+           
+            
+             cout<<"PLEASE ENTER YOUR CIBIL SCORE:- ";
+           cin>>cibil;
+         cout<<"ENTER YOUR NET SALARY ";
+         cin>> net_salary;
+         cout<<"ENTER YOUR AGE :-";
+         cin>>age;
+         cout<<"DO YOU HAVE ITR FILED OF THE PAST THREE YEAR'S :- Y(yes) N(no) \n";
+                cout<<"PLEASE ENTER(Y/N) :- ";
+         cin>>itr; 
+         cout<<"DO YOU HAVE ALL MONTHS BALANCE SHEET  OF THIS  YEAR :- Y(yes) N(no) \n";
+                cout<<"PLEASE ENTER(Y/N) :- ";
+         cin>>sheet; 
+         current_object.home_decider(cibil,net_salary,age,itr,sheet);
+           }
+            else{
+                in_loan--;
+            }
+    }
+    break;
+    }
+    case 3:{//this loop interactes with the user to provide the requred details of the mutual fund section
+    int in_mutual_fund=1;
+    current_object.top_funds();
+    while(in_mutual_fund){
+          int fund_section;
+                  cout<<" MUTUAL FUNDS:- \n";
+            cout<<" 1. SHOW CATEGORIES \n";
+            cout<<"2. DISPLAY FUNDS\n";
+            cout<<"3. SIP CALCULATOR\n";
+                        cout<<"4 . BACK\n";
+            cout<<"PLEASE ENTER THE CORRESPONDING SERIAL NUMBER:- ";
+            cin>>fund_section;
+              if(fund_section<=0 || fund_section >=5){
+               cout<<"PLEASE ENTER A VALID SERIAL NUMBER \n";
+               continue;
+           }
+           char ch1;
+           if(fund_section==1){
+               current_object.categories();}
+else if( fund_section==2){
+    current_object.display_funds();
+}
+else if(fund_section==3)
+{   current_object.sip_calculator();
+    }
+    else{
+        in_mutual_fund--;
+    }
+    }
+    break;
+    }
+    case 4:{//this loop interactes with the user to provide the requred details of the money transfer section
+     int in_money=1;
+       while(in_money){
+        int money_section;
+            cout<<" 1. SHOW MAXIMUM AMOUNT TRANSER LIST \n";
+            cout<<"2. BACK\n";
+            cout<<"PLEASE ENTER THE CORRESPONDING SERIAL NUMBER:- ";
+            cin>>money_section;
+              if(money_section<=0 || money_section >=3){
+               cout<<"PLEASE ENTER A VALID SERIAL NUMBER \n";
+               continue;
+           }
+           if(money_section == 1){
+               current_object.maximum_list();
+           }
+           else{
+               in_money--;
+           }
+       }
+    break;
+    }
+    case 5 :{//this loop interactes with the user to provide the requred details of the insurance section
+    int in_insurance=1;
+        while(in_insurance){
+          int insurance_section;
+                  cout<<" INSURANCE:- \n";
+            cout<<" 1. CAR INSURANCE \n";
+            cout<<"2. HEALTH INSURANCE\n";
+            cout<<"3. LIFE INSURANCE\n";
+             cout<<"4. HOME INSURANCE\n";
+                        cout<<" 5. BACK\n";
+            cout<<"PLEASE ENTER THE CORRESPONDING SERIAL NUMBER:- ";
+            cin>>insurance_section;
+              if(insurance_section<=0 || insurance_section >=6){
+               cout<<"PLEASE ENTER A VALID SERIAL NUMBER \n";
+               continue;
+           }
+           if(insurance_section==1){
+               current_object.car_insurance();
+           }
+           else if(insurance_section==2){
+               current_object.health_insurance();
+           }
+           else if(insurance_section==3){
+               current_object.life_insurance();
+           }
+           else if(insurance_section==4){
+               current_object.home_insurance();
+           }
+           else{
+               in_insurance--;
+           }
+        }
+        break;
+    }
+        case 6: current_object.portfolio_management();//this loop interactes with the user to provide the requred details of the portfolio management section
+   
+    }
+}
+return 0;
+}
